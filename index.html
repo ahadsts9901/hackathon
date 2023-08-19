@@ -15,9 +15,11 @@
     <!-- font cdn -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- css -->
     <link rel="stylesheet" href="./posts/main.css">
@@ -26,24 +28,25 @@
 </head>
 
 <body
-    class="font-[Josefin_Sans] flex flex-col p-[1em] justify-right gap-[1em] items-center w-[100%] h-[100vh] bg-[#15182b] font-bold">
-    <h1 class="text-[#fff] text-[2em]">Firebase CRUD</h1>
-    <button class="button" onclick="logOut()">Log Out</button>
-    <fieldset class="w-[100%] text-[#fff] border border-[2px] border-[white] p-[1em]">
-        <legend
-            class="text-[white] w-[fit-content] h-[fit-content] p-[0.3em] border border-r-[2px] border-l-[2px] border-t-[0px] border-b-[0px]">
-            Form</legend>
+    class="font-[Roboto] flex flex-col p-[1em] justify-right gap-[1em] items-center w-[100%] h-[100vh] bg-[#15182b] font-bold">
 
-        <form onsubmit="create(event)" class="flex flex-col justify-right items-center gap-[1em]">
-            <input id="title" type="text" placeholder="Title" class="bg-[#fff] text-[#15182b] p-[0.5em] w-[100%]">
-            <textarea id="text" placeholder="Text"
-                class="bg-[#fff] text-[#15182b] p-[0.5em] w-[100%] h-[8em]"></textarea>
-            <button type="submit" class="bg-[#fff] text-[#15182b] p-[0.5em] w-[100%]">Submit</button>
-        </form>
+    <header>
+        <h3>Personal Blogging App</h3>
+        <div class="flex justify-center items-center width-[fit-content] gap-[1em]">
+            <p id="headerName">kahhshdhssd</p>
+            <a onclick="logOut()">Logout</a>
+        </div>
+    </header>
 
-    </fieldset>
+    <h2 class="heading">Dashboard</h2>
 
-    <div class="result flex justify-right items-center flex-wrap gap-[1em]"></div>
+    <form class="form" onsubmit="createPost(event)">
+        <input required type="text" class="input" placeholder="Title...">
+        <textarea required id="post" class="input post" required placeholder="Text..." oninput="textAreaSize()"></textarea>
+        <button type="submit" class="button">Publish blog</button>
+    </form>
+
+    <div class="result"></div>
 
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

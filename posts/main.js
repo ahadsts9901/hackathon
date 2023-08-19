@@ -11,157 +11,171 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-function create(event) {
-    event.preventDefault()
-    let title = document.querySelector("#title").value
-    let text = document.querySelector("#text").value
-    let timestamp = firebase.firestore.FieldValue.serverTimestamp()
+function textAreaSize() {
+    var textArea = document.querySelector(".post");
+    textArea.style.height = "auto"; // Reset the height to auto to recalculate the size
+
+    // Calculate the maximum height for 5 lines
+    var maxHeight = parseInt(window.getComputedStyle(textArea).lineHeight) * 16;
+
+    // Set the height to the scrollHeight, but not exceeding the maximum height
+    textArea.style.height = Math.min(textArea.scrollHeight, maxHeight) + "px";
+}
+
+function createPost(event) {
+    event.preventDefault();
+
+    // get the values
+    let title = document.getElementById("title");
+    let post = document.getElementById("post");
+    let auth = firebase.auth();
+    let user = auth.currentUser;
+    let userEmail = user.email;
+
+    // Get the current timestamp
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
     db.collection("posts")
         .add({
-            title: title,
-            text: text,
-            timestamp: timestamp
+            title:title.value,
+            post: post.value,
+            user: userEmail,
+            timestamp: timestamp,
         })
-        .then(function (docRef) {
-            console.log("added")
-            render();
+        .then((docRef) => {
+            //console.log("Document written with ID:", docRef.id);
+            Swal.fire({
+                icon: "success",
+                title: "Added",
+                text: "Post Done",
+                confirmButtonColor: "#212121",
+            });
+            window.location.href = "./index.html";
+            renderPosts();
         })
-        .catch(function (error) {
-            console.error("Error adding document: ", error);
+        .catch((error) => {
+            //console.error("Error adding document:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Could Not Post",
+                confirmButtonColor: "#212121",
+            });
         });
 
-    document.querySelector("#title").value = ""
-    document.querySelector("#text").value = ""
-
+    post.value = "";
 }
 
-function render() {
-    var container = document.querySelector(".result");
+function renderPosts() {
+    let container = document.querySelector(".result");
     container.innerHTML = "";
-
-    db.collection("posts")
-        .orderBy("timestamp", "desc") //sort by time
+    db.collection("post")
+        .orderBy("timestamp", "desc")
         .get()
-        .then(function (querySnapshot) {
-            if (querySnapshot.size === 0) {
-                container.innerHTML = "<div class='blue'>No Users found</div>";
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                container.innerText = "No Post Found";
             } else {
-                querySnapshot.forEach(function (doc) {
+                querySnapshot.forEach(function(doc) {
                     var data = doc.data();
+                    var timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
+                    let post = document.createElement("div");
+                    post.className += " column renderPost";
 
-                    var card = document.createElement("div");
-                    card.className = "w-[10em] h-[10em] p-[1em] flex flex-col justify-right items-start gap-[1em] border border-[2px] border-[white] bg-[#15182b]";
-                    container.appendChild(card);
+                    let row = document.createElement("div");
+                    row.className += "row";
+                    post.appendChild(row);
 
-                    var heading = document.createElement("h3");
-                    heading.className = "text-[1.5em] text-[white] w-[100%]";
-                    heading.textContent = data.title;
-                    card.appendChild(heading);
+                    let image = document.createElement("h2");
+                    image.className += " bi bi-person-fill";
+                    row.appendChild(image);
 
-                    var text = document.createElement("p");
-                    text.className = "text-[1em] text-[white] w-[100%]";
-                    text.textContent = data.text;
-                    card.appendChild(text);
+                    let drop = document.createElement("div");
+                    drop.innerHTML = `
+                      <div class="dropdown">
+                        <button class="drop-down" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <h2 class="bi bi-three-dots-vertical dots"></h2>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li class="list dropdown-options" type="buttons" onclick="deletePost('${doc.id}')"><i class="bi bi-trash-fill"></i> Delete Post</li>
+                          <li class="list dropdown-options" type="buttons" onclick="editPost('${doc.id}')"><i class="bi bi-pencil-fill"></i> Edit Post</li>
+                        </ul>
+                      </div>`;
+                    row.appendChild(drop);
 
-                    var para = document.createElement("div");
-                    para.className = "flex justify-right items-center text-[0.8em] text-[white] gap-[1em]";
-                    card.appendChild(para);
+                    let name = document.createElement("p");
+                    name.innerText = data.user.slice(0, -10);
+                    row.appendChild(name);
 
-                    var del = document.createElement("i");
-                    del.className += " bi bi-trash-fill buttons";
-                    del.addEventListener("click", delDoc);
-                    para.appendChild(del);
+                    let time = document.createElement("p");
+                    time.className += " postTime";
+                    time.innerText = moment(timestamp).fromNow();
+                    row.appendChild(time);
 
-                    var edit = document.createElement("i");
-                    edit.className += " bi bi-pencil-fill buttons";
-                    edit.addEventListener("click", editDoc);
-                    para.appendChild(edit);
+                    let text = document.createElement("p");
+                    text.className += " text";
+                    text.innerText = data.post;
+                    post.appendChild(text);
 
-                    // ...................................................................................................................
+                    let commentRow = document.createElement("div");
+                    commentRow.innerHTML = `
+                    <div class="dropdown hundred">
+                    <button class="drop-down comment-flex" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <p class="bi bi-star" id="like" onclick="like(event)"> Like</p>
+                      <p class="bi bi-chat-square-text dots hundred"> Comments</p>
+                    </button>
+                    <ul class="dropdown-menu commentCont">
+                    <form class="commentform row" onsubmit="addComment(event,'${doc.id}')">
+                    <textarea rows="3" required class="commentinput" placeholder="Enter your comment..." ></textarea>
+                    <button type="submit" class="commentsubmit">+ Add</button>
+                    </form>
+                    </ul>
+                  </div>
+                    `;
+                    post.appendChild(commentRow);
 
-                    //delete function
+                    // Render comments
+                    let commentsDiv = document.createElement("div");
+                    commentsDiv.className = "commentsDiv";
 
-                    function delDoc(event) {
-                        event.preventDefault();
-                        let docId = doc.id;
-                        db.collection("posts").doc(docId).delete();
+                    db.collection("post")
+                        .doc(doc.id)
+                        .collection("comments")
+                        .orderBy("timestamp", "desc")
+                        .get()
+                        .then((querySnapshot) => {
+                            if (!querySnapshot.empty) {
+                                querySnapshot.forEach((commentDoc) => {
+                                    let commentData = commentDoc.data();
+                                    let commentUser = commentData.user;
+                                    let commentText = commentData.comment;
 
-                        setTimeout(() => {
-                            render();
-                        }, 1000)
-                    }
-
-                    async function editDoc(event) {
-                        event.preventDefault();
-                        let password = "123"
-                        if (password === "123") {
-                            let title = data.title;
-                            let text = data.text;
-
-                            const { value: formValues } = await Swal.fire({
-                                title: "Edit",
-                                html: `<input value="${title}" type="text" id="swal-input1" class="swal2-input nameSwal" placeholder="Title...">` +
-                                    `<input value="${text}" type="text" id="swal-input2" class="swal2-input fatherSwal" placeholder="Text...">`,
-                                confirmButtonColor: "#0d86ff",
-                                confirmButtonText: "Edit",
-                                focusConfirm: false,
-                                preConfirm: () => {
-                                    const titleValue =
-                                        document.getElementById("swal-input1").value;
-                                    const textValue =
-                                        document.getElementById("swal-input2").value;
-
-                                    if (
-                                        titleValue.trim() === "" ||
-                                        textValue.trim() === ""
-
-                                    ) {
-                                        Swal.showValidationMessage(
-                                            "Please enter a value for each field"
-                                        );
-                                        return false;
-                                    }
-
-                                    return [titleValue, textValue];
-                                },
-                            });
-
-                            if (formValues) {
-                                let docId = doc.id;
-                                db.collection("posts")
-                                    .doc(docId)
-                                    .update({
-                                        title: formValues[0],
-                                        text: formValues[1],
-                                    })
-                                    .then(() => {
-                                        render();
-                                        Swal.fire({
-                                            icon: "success",
-                                            title: "Edited",
-                                            confirmButtonText: "OK",
-                                            confirmButtonColor: "#0d86ff",
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        console.error("Error updating document: ", error);
-                                    });
+                                    let commentRow = document.createElement("div");
+                                    commentRow.className = "commentRow";
+                                    commentRow.innerHTML = `<p><p class="dropdown-options commentEditDel" onclick="editComment('${doc.id}', '${commentDoc.id}')"><i class="bi bi-pencil-fill"></i></p>
+                                    <p class="dropdown-options commentEditDel" onclick="deleteComment('${doc.id}', '${commentDoc.id}')"><i class="bi bi-trash-fill"></i></p><strong>${commentUser.slice(0, -10)}:</strong> ${commentText}</p>`;
+                                    commentsDiv.appendChild(commentRow);
+                                });
                             }
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Access Denied",
-                                confirmButtonText: "OK",
-                                confirmButtonColor: "#0d86ff",
-                            });
-                        }
-                    }
+                        })
+                        .catch((error) => {
+                            //console.error("Error getting comments:", error);
+                        });
 
-                })
+                    var ul = commentRow.querySelector(".commentCont"); // Update this line
+                    var li = document.createElement("li"); // Update this line
+                    li.appendChild(commentsDiv);
+                    ul.appendChild(li);
+
+                    container.appendChild(post);
+                });
             }
         })
+        .catch((error) => {
+            //console.error("Error getting posts: ", error);
+        });
 }
+
 function logOut() {
     firebase
         .auth()
@@ -184,5 +198,5 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    render();
+    renderPosts();
 });
