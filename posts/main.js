@@ -7,9 +7,20 @@ const firebaseConfig = {
     appId: "1:566308702301:web:f8ed2b146cc7e5faffe5b4",
     measurementId: "G-W7ERKEX4FB"
 };
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+
+let username = "";
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        username = user.email.slice(0, -10); // Store the username
+        document.getElementById("headerName").innerText = username;
+    } else {
+        window.location.href = "../login/index.html";
+        document.getElementById("headerName").innerText = 'null';
+    }
+});
 
 function textAreaSize() {
     var textArea = document.querySelector(".post");
@@ -25,14 +36,11 @@ function textAreaSize() {
 function createPost(event) {
     event.preventDefault();
 
-    // get the values
     let title = document.getElementById("title");
     let post = document.getElementById("post");
     let auth = firebase.auth();
     let user = auth.currentUser;
     let userEmail = user.email;
-    // const imageSrc = currentUser.photoURL
-    // Get the current timestamp
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
     db.collection("posts")
@@ -40,11 +48,9 @@ function createPost(event) {
             title: title.value,
             post: post.value,
             user: userEmail,
-            // image: imageSrc,
             timestamp: timestamp,
         })
         .then((docRef) => {
-            //console.log("Document written with ID:", docRef.id);
             Swal.fire({
                 icon: "success",
                 title: "Added",
@@ -56,7 +62,6 @@ function createPost(event) {
             renderPostsUser();
         })
         .catch((error) => {
-            //console.error("Error adding document:", error);
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -82,8 +87,6 @@ function renderPostsUser() {
             } else {
                 querySnapshot.forEach(function (doc) {
                     var data = doc.data();
-
-                    document.getElementById("headerName").innerText = data.user.slice(0, -10)
 
                     var timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
                     let post = document.createElement("div");
@@ -135,120 +138,31 @@ function renderPostsUser() {
                     cont.style.gap = "1em"
                     cont.style.padding = "1em"
 
-                    let del = document.createElement('p')
-                    del.className += 'del'
-                    del.innerText = 'Delete'
-                    del.addEventListener("click", function () {
-                        post.dataset.id = doc.id;
-                        console.log(doc.id);
-                        delPost(doc.id);
-                    });
-                    cont.appendChild(del)
+                    if (username === data.user.slice(0, -10)) {
+                        let del = document.createElement('p')
+                        del.className += 'del'
+                        del.innerText = 'Delete'
+                        del.addEventListener("click", function () {
+                            post.dataset.id = doc.id;
+                            console.log(doc.id);
+                            delPost(doc.id);
+                        });
+                        cont.appendChild(del)
 
+                        let edit = document.createElement('p')
+                        edit.className += 'del'
+                        edit.innerText = 'Edit'
+                        edit.addEventListener("click", function () {
+                            post.dataset.id = doc.id;
+                            console.log(doc.id);
+                            editPost(doc.id, data.title, data.post);
+                        });
+                        cont.appendChild(edit)
+                    }
 
-                    let edit = document.createElement('p')
-                    edit.className += 'del'
-                    edit.innerText = 'Edit'
-                    edit.addEventListener("click", function () {
-                        post.dataset.id = doc.id;
-                        console.log(doc.id);
-                        editPost(doc.id, data.title, data.post);
-                    });
-                    cont.appendChild(edit)
-
-                    post.appendChild(cont)
+                    post.appendChild(cont);
 
                     container.appendChild(post);
-
-                    // ... Previous code ...
-
-                    function delPost(postId) {
-                        // Show a confirmation popup using SweetAlert
-                        Swal.fire({
-                            title: "Delete Post",
-                            text: "Are you sure you want to delete this post?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#8540f5",
-                            cancelButtonColor: "#8540f5",
-                            confirmButtonText: "Yes, delete it!",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                db.collection("posts").doc(postId).delete()
-                                    .then(() => {
-                                        Swal.fire({
-                                            icon: "success",
-                                            title: "Deleted",
-                                            text: "Post has been deleted.",
-                                            confirmButtonColor: "##8540f5",
-                                        });
-                                        renderPostsUser();
-                                    })
-                                    .catch((error) => {
-                                        Swal.fire({
-                                            icon: "error",
-                                            title: "Error",
-                                            text: "An error occurred while deleting the post.",
-                                            confirmButtonColor: "#8540f5",
-                                        });
-                                    });
-                            }
-                        });
-                    }
-
-                    function editPost(postId, previousTitle, previousPost) {
-                        // Show a prompt using SweetAlert for editing
-                        Swal.fire({
-                            title: "Edit Post",
-                            html:
-                                `<input id="editedTitle" class="swal2-input" value="${previousTitle}" placeholder="Title...">
-                                 <textarea id="editedPost" class="swal2-input swal-ta" placeholder="Text...">${previousPost}</textarea>`,
-                            showCancelButton: true,
-                            confirmButtonColor: "#8540f5",
-                            cancelButtonColor: "#8540f5",
-                            confirmButtonText: "Save",
-                            preConfirm: () => {
-                                const editedTitle = document.getElementById('editedTitle').value;
-                                const editedPost = document.getElementById('editedPost').value;
-
-                                if (!editedTitle.trim() || !editedPost.trim()) {
-                                    Swal.showValidationMessage('Both fields are required');
-                                }
-
-                                return { editedTitle, editedPost };
-                            },
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                const { editedTitle, editedPost } = result.value;
-                                db.collection("posts").doc(postId).update({
-                                    title: editedTitle,
-                                    post: editedPost,
-                                })
-                                    .then(() => {
-                                        Swal.fire({
-                                            icon: "success",
-                                            title: "Updated",
-                                            text: "Post has been updated.",
-                                            confirmButtonColor: "#8540f5",
-                                            showConfirmButton: false,
-                                            timer: 1500,
-                                        });
-                                        renderPostsUser();
-                                    })
-                                    .catch((error) => {
-                                        Swal.fire({
-                                            icon: "error",
-                                            title: "Error",
-                                            text: "An error occurred while updating the post.",
-                                            confirmButtonColor: "#8540f5",
-                                            showConfirmButton: false,
-                                            timer: 1500,
-                                        });
-                                    });
-                            }
-                        });
-                    }
-
 
                 });
             }
@@ -258,7 +172,92 @@ function renderPostsUser() {
         });
 }
 
+function delPost(postId) {
+    // Show a confirmation popup using SweetAlert
+    Swal.fire({
+        title: "Delete Post",
+        text: "Are you sure you want to delete this post?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#8540f5",
+        cancelButtonColor: "#8540f5",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            db.collection("posts").doc(postId).delete()
+                .then(() => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted",
+                        text: "Post has been deleted.",
+                        confirmButtonColor: "##8540f5",
+                    });
+                    renderPostsUser();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "An error occurred while deleting the post.",
+                        confirmButtonColor: "#8540f5",
+                    });
+                });
+        }
+    });
+}
 
+function editPost(postId, previousTitle, previousPost) {
+    // Show a prompt using SweetAlert for editing
+    Swal.fire({
+        title: "Edit Post",
+        html:
+            `<input id="editedTitle" class="swal2-input" value="${previousTitle}" placeholder="Title...">
+             <textarea id="editedPost" class="swal2-input swal-ta" placeholder="Text...">${previousPost}</textarea>`,
+        showCancelButton: true,
+        confirmButtonColor: "#8540f5",
+        cancelButtonColor: "#8540f5",
+        confirmButtonText: "Save",
+        preConfirm: () => {
+            const editedTitle = document.getElementById('editedTitle').value;
+            const editedPost = document.getElementById('editedPost').value;
+
+            if (!editedTitle.trim() || !editedPost.trim()) {
+                Swal.showValidationMessage('Both fields are required');
+            }
+
+            return { editedTitle, editedPost };
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const { editedTitle, editedPost } = result.value;
+            db.collection("posts").doc(postId).update({
+                title: editedTitle,
+                post: editedPost,
+            })
+                .then(() => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Post has been updated.",
+                        confirmButtonColor: "#8540f5",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    renderPostsUser();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "An error occurred while updating the post.",
+                        confirmButtonColor: "#8540f5",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
+        }
+    });
+}
 
 function logOut() {
     firebase
@@ -266,7 +265,6 @@ function logOut() {
         .signOut()
         .then(() => {
             console.log("Sign out successful");
-            // Redirect to the sign-in page or any other desired destination
             window.location.href = "./login/index.html";
         })
         .catch((error) => {
