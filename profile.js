@@ -12,6 +12,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
+var db = firebase.firestore();
 
 document.addEventListener("DOMContentLoaded", function() {
     const resetButton = document.getElementById("rbtn");
@@ -64,48 +65,11 @@ function logOut() {
         .auth()
         .signOut()
         .then(() => {
-            console.log("Sign out successful");
+            // console.log("Sign out successful");
             // Redirect to the sign-in page or any other desired destination
             window.location.href = "./login/index.html";
         })
         .catch((error) => {
             console.log("Sign out error:", error);
         });
-}
-
-function editName() {
-    Swal.fire({
-        title: "Edit Name",
-        html:
-            `<input id="edit-first-name" class="swal2-input" placeholder="First Name">
-             <input id="edit-last-name" class="swal2-input" placeholder="Last Name">`,
-        confirmButtonText: "Save",
-        showCancelButton: true,
-        preConfirm: () => {
-            const editedFirstName = document.getElementById('edit-first-name').value;
-            const editedLastName = document.getElementById('edit-last-name').value;
-            // Update the user's first name and last name in the Firestore database
-            const user = firebase.auth().currentUser;
-            if (user) {
-                return db.collection("users")
-                    .doc(user.uid)
-                    .update({
-                        firstName: editedFirstName,
-                        lastName: editedLastName
-                    });
-            } else {
-                throw new Error("User not authenticated");
-            }
-        }
-    })
-    .then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire("Updated!", "Your name has been updated.", "success");
-            renderUserData(); // Re-render the user data on the page
-        }
-    })
-    .catch((error) => {
-        console.error(error);
-        Swal.fire("Error", "Could not update your name.", "error");
-    });
 }

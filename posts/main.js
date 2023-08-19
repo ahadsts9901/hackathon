@@ -144,7 +144,7 @@ function renderPostsUser() {
                         del.innerText = 'Delete'
                         del.addEventListener("click", function () {
                             post.dataset.id = doc.id;
-                            console.log(doc.id);
+                            // console.log(doc.id);
                             delPost(doc.id);
                         });
                         cont.appendChild(del)
@@ -154,7 +154,7 @@ function renderPostsUser() {
                         edit.innerText = 'Edit'
                         edit.addEventListener("click", function () {
                             post.dataset.id = doc.id;
-                            console.log(doc.id);
+                            // console.log(doc.id);
                             editPost(doc.id, data.title, data.post);
                         });
                         cont.appendChild(edit)
@@ -264,7 +264,8 @@ function logOut() {
         .auth()
         .signOut()
         .then(() => {
-            console.log("Sign out successful");
+            // console.log("Sign out successful");//
+
             window.location.href = "./login/index.html";
         })
         .catch((error) => {

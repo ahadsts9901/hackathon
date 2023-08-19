@@ -15,7 +15,7 @@ let username = "";
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-        console.log(localStorage.getItem("userMail"))
+        // console.log(localStorage.getItem("userMail"))
         document.getElementById("mail").innerText = localStorage.getItem("userMail");
         document.getElementById("pname").innerText = localStorage.getItem("userMail").slice(0, -10);
         document.getElementById("User").innerText = localStorage.getItem("userMail").slice(0, -10);
@@ -24,8 +24,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         document.getElementById("headerName").innerText = 'null';
     }
 });
-
-
 
 function renderUserPosts(userEmail) {
     let container = document.querySelector(".user-posts-container");
@@ -36,7 +34,7 @@ function renderUserPosts(userEmail) {
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
                 container.innerHTML = "<h1 class='font'>No Posts Found</h1>";
-                console.log("me")
+                // console.log("me")
             } else {
 
                 querySnapshot.forEach(function (doc) {
@@ -87,14 +85,14 @@ function renderUserPosts(userEmail) {
                     time.innerText = ` ${moment(timestamp).fromNow()}`;
                     tim.appendChild(time);
 
-                    console.log(data.user == localStorage.getItem('userMail'))
+                    // console.log(data.user == localStorage.getItem('userMail'))
 
                     if (data.user == localStorage.getItem('userMail')) {
-                        console.log("Matched user:", data.user);
-                        console.log(post)
+                        // console.log("Matched user:", data.user);
+                        // console.log(post)
                         container.appendChild(post);
                     } else {
-                        console.log("Not matched user:", data.user);
+                        // console.log("Not matched user:", data.user);
                     }
                 });
             }
@@ -113,7 +111,7 @@ function logOut() {
         .auth()
         .signOut()
         .then(() => {
-            console.log("Sign out successful");
+            // console.log("Sign out successful");
             // Redirect to the sign-in page or any other desired destination
             window.location.href = "./login/index.html";
         })

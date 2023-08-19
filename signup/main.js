@@ -110,8 +110,8 @@ function signup(event) {
     document.getElementById("password-signup-repeat").value = "";
 }
 
-db.collection("users")
-        .add({
+db.collection(`${email}`).doc("profile")
+        .set({
             firstName: firstName,
             lastName: lastName,
             email: email,

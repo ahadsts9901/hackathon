@@ -90,7 +90,7 @@ function renderPostsUser() {
                     cont.style.padding = "1em"
                     cont.addEventListener("click",(event)=>{
                         let mail = event.target.parentNode.querySelector('div>div>div>div>div').firstChild.innerText + "@gmail.com";
-                        console.log(mail)
+                        // console.log(mail)
                         localStorage.setItem("userMail", mail)
                     })
 
@@ -112,7 +112,7 @@ function logOut() {
         .auth()
         .signOut()
         .then(() => {
-            console.log("Sign out successful");
+            // console.log("Sign out successful");
             window.location.href = "./login/index.html";
         })
         .catch((error) => {
