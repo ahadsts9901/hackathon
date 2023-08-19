@@ -17,7 +17,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         username = user.email.slice(0, -10); // Store the username
         document.getElementById("headerName").innerText = username;
-        document.getElementById("name").innerText = username;
+        document.getElementById("headerName").innerText = username;
     } else {
         window.location.href = "../login/index.html";
         document.getElementById("headerName").innerText = 'null';

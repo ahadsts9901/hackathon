@@ -72,6 +72,7 @@ function renderPostsUser() {
                     div.appendChild(tim)
 
                     let name = document.createElement("p");
+                    name.className += " userMail";
                     name.innerText = `${data.user.slice(0, -10)}`;
                     tim.appendChild(name);
 
@@ -87,6 +88,11 @@ function renderPostsUser() {
                     cont.href = './user.html'
                     cont.style.gap = "1em"
                     cont.style.padding = "1em"
+                    cont.addEventListener("click",(event)=>{
+                        let mail = event.target.parentNode.querySelector('div>div>div>div>div').firstChild.innerText + "@gmail.com";
+                        console.log(mail)
+                        localStorage.setItem("userMail", mail)
+                    })
 
                     post.appendChild(cont);
 
