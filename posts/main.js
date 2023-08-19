@@ -17,7 +17,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         username = user.email.slice(0, -10); // Store the username
         document.getElementById("headerName").innerText = username;
     } else {
-        window.location.pathname = "/login/index.html";
+        window.location.pathname = "/hackathon/login/index.html";
         document.getElementById("headerName").innerText = 'null';
     }
 });
