@@ -557,3 +557,11 @@ ul {
     width: 100%!important;
     padding-left: 1em;
 }
+
+.full{
+    width: 100%!important;
+}
+
+.myImg{
+    width: 80%;
+}

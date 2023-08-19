@@ -15,10 +15,10 @@ let username = "";
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-        username = user.email.slice(0, -10); // Store the username
-        document.getElementById("mail").innerText = user.email;
-        document.getElementById("pname").innerText = username;
-        document.getElementById("User").innerText = username;
+        console.log(localStorage.getItem("userMail"))
+        document.getElementById("mail").innerText = localStorage.getItem("userMail");
+        document.getElementById("pname").innerText = localStorage.getItem("userMail").slice(0, -10);
+        document.getElementById("User").innerText = localStorage.getItem("userMail").slice(0, -10);
     } else {
         window.location.href = "../login/index.html";
         document.getElementById("headerName").innerText = 'null';
@@ -31,20 +31,20 @@ function renderUserPosts(userEmail) {
     let container = document.querySelector(".user-posts-container");
     container.innerHTML = "";
     db.collection("posts")
-    .orderBy("timestamp", "desc")
-    .get()
-    .then((querySnapshot) => {
-        if (querySnapshot.empty) {
-            container.innerHTML = "<h1 class='font'>No Posts Found</h1>";
-            console.log("me")
-        } else {
-            
+        .orderBy("timestamp", "desc")
+        .get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                container.innerHTML = "<h1 class='font'>No Posts Found</h1>";
+                console.log("me")
+            } else {
+
                 querySnapshot.forEach(function (doc) {
                     var data = doc.data();
 
                     var timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
                     let post = document.createElement("div");
-                    post.className += " column renderPost";
+                    post.className += " column renderPost full";
 
                     let row = document.createElement("div");
                     row.className += " row";
@@ -87,42 +87,15 @@ function renderUserPosts(userEmail) {
                     time.innerText = ` ${moment(timestamp).fromNow()}`;
                     tim.appendChild(time);
 
-                    let cont = document.createElement("div");
-                    cont.className += " row";
-                    cont.style.gap = "1em"
-                    cont.style.padding = "0.5em"
+                    console.log(data.user == localStorage.getItem('userMail'))
 
-                        let del = document.createElement('p')
-                        del.className += 'del'
-                        del.innerText = 'Delete'
-                        del.addEventListener("click", function () {
-                            post.dataset.id = doc.id;
-                            console.log(doc.id);
-                            delPost(doc.id);
-                        });
-                        cont.appendChild(del)
-
-                        let edit = document.createElement('p')
-                        edit.className += 'del'
-                        edit.innerText = 'Edit'
-                        edit.addEventListener("click", function () {
-                            post.dataset.id = doc.id;
-                            console.log(doc.id);
-                            editPost(doc.id, data.title, data.post);
-                        });
-                        cont.appendChild(edit)
-                        
-                        post.appendChild(cont);
-
-                        console.log(data.user == localStorage.getItem('userMail'))
-                        
-                        if (data.user == localStorage.getItem('userMail')) {
-                            console.log("Matched user:", data.user);
-                            console.log(post)
-                            container.appendChild(post);
-                        }else{
-                            console.log("Not matched user:", data.user);
-                        }
+                    if (data.user == localStorage.getItem('userMail')) {
+                        console.log("Matched user:", data.user);
+                        console.log(post)
+                        container.appendChild(post);
+                    } else {
+                        console.log("Not matched user:", data.user);
+                    }
                 });
             }
         })
@@ -131,7 +104,7 @@ function renderUserPosts(userEmail) {
         });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     renderUserPosts();
 });
 

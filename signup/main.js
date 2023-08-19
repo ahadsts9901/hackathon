@@ -82,38 +82,6 @@ function signup(event) {
         return;
     }
 
-    // user data
-
-    db.collection("users")
-        .add({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
-        })
-        .then((docRef) => {
-            //console.log("Document written with ID:", docRef.id);
-            Swal.fire({
-                icon: "success",
-                title: "Added",
-                text: "Signup Successfull",
-                confirmButtonColor: "#8540f5",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        })
-        .catch((error) => {
-            //console.error("Error adding document:", error);
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Could Not Signup",
-                confirmButtonColor: "#8540f5",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-
     // firebase
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -141,3 +109,17 @@ function signup(event) {
     document.getElementById("password-signup").value = "";
     document.getElementById("password-signup-repeat").value = "";
 }
+
+db.collection("users")
+        .add({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+        })
+        .then((docRef) => {
+            //console.log("Document written with ID:", docRef.id);
+        })
+        .catch((error) => {
+            //console.error("Error adding document:", error);
+        });
