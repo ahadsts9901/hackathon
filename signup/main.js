@@ -9,7 +9,7 @@ const firebaseConfig = {
   };
 // initialize firebase
 firebase.initializeApp(firebaseConfig);
-
+var db = firebase.firestore();
 
 // show Password
 function showPassword(event) {
@@ -82,9 +82,40 @@ function signup(event) {
         return;
     }
 
+    // user data
+
+    db.collection("users")
+        .add({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+        })
+        .then((docRef) => {
+            //console.log("Document written with ID:", docRef.id);
+            Swal.fire({
+                icon: "success",
+                title: "Added",
+                text: "Signup Successfull",
+                confirmButtonColor: "#8540f5",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+        .catch((error) => {
+            //console.error("Error adding document:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Could Not Signup",
+                confirmButtonColor: "#8540f5",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+
     // firebase
 
-    firebase
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
         // After successful registration, set the photoURL
@@ -93,6 +124,7 @@ function signup(event) {
             photoURL: user.photoURL,
         }).then(() => {
             // Now the photoURL is set for the user
+            window.location.href = "../index.html";
         }).catch((error) => {
             console.log("Error setting profile picture:", error);
         });

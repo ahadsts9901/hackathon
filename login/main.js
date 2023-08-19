@@ -72,7 +72,7 @@ function login(event) {
                     icon: 'error',
                     title: 'Access Denied',
                     text: 'Invalid email or password. Please enter correct credentials',
-                    confirmButtonColor: "#252525"
+                    confirmButtonColor: "#8540f5"
                 })
                 // alert("Invalid email or password. Please enter correct credentials.");
         });

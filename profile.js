@@ -82,9 +82,6 @@ function renderPostsUser() {
             } else {
                 querySnapshot.forEach(function (doc) {
                     var data = doc.data();
-
-                    document.getElementById("headerName").innerText = data.user.slice(0, -10)
-
                     var timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
                     let post = document.createElement("div");
                     post.className += " column renderPost";
