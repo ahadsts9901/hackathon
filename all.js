@@ -17,7 +17,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         username = user.email.slice(0, -10); // Store the username
         document.getElementById("headerName").innerText = username;
     } else {
-        window.location.href = "../login/index.html";
+        window.location.href = "./login.html";
         document.getElementById("headerName").innerText = 'null';
     }
 });
@@ -113,7 +113,7 @@ function logOut() {
         .signOut()
         .then(() => {
             // console.log("Sign out successful");
-            window.location.href = "./login/index.html";
+            window.location.href = "./login.html";
         })
         .catch((error) => {
             console.log("Sign out error:", error);
