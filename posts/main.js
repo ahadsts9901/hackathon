@@ -87,7 +87,8 @@ function renderPostsUser() {
             } else {
                 querySnapshot.forEach(function (doc) {
                     var data = doc.data();
-
+                    
+                    if (username === data.user.slice(0, -10)) {
                     var timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
                     let post = document.createElement("div");
                     post.className += " column renderPost";
@@ -136,9 +137,8 @@ function renderPostsUser() {
                     let cont = document.createElement("div");
                     cont.className += " row";
                     cont.style.gap = "1em"
-                    cont.style.padding = "1em"
+                    cont.style.padding = "0.5em"
 
-                    if (username === data.user.slice(0, -10)) {
                         let del = document.createElement('p')
                         del.className += 'del'
                         del.innerText = 'Delete'
@@ -158,11 +158,11 @@ function renderPostsUser() {
                             editPost(doc.id, data.title, data.post);
                         });
                         cont.appendChild(edit)
+                        
+                        post.appendChild(cont);
+                        
+                        container.appendChild(post);
                     }
-
-                    post.appendChild(cont);
-
-                    container.appendChild(post);
 
                 });
             }

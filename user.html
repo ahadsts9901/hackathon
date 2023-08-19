@@ -29,29 +29,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 
-<body
-    class="font-[Roboto] flex flex-col p-[1em] justify-right gap-[1em] items-center w-[100%] h-[100vh] bg-[#15182b] font-bold">
+<body class="font-[Roboto] flex flex-col p-[1em] justify-right gap-[1em] items-center w-[100%] h-[100vh] font-bold">
 
     <header>
         <h3>Personal Blogging App</h3>
         <div class="flex justify-center items-center width-[fit-content] gap-[1em]">
-            <p id="headerName"></p>
             <a onclick="logOut()">Logout</a>
         </div>
     </header>
-
-    <h2 class="heading">Profile</h2>
-
-    <div class="w-[16em] h-[auto] bg-[#fff] border border-[1px] gap-[1.5em] border-[#ccc] p-[1em] mt-[3em] flex flex-col justify-right items-start">
-        <img src="https://avatars.githubusercontent.com/u/120649081?v=4" class="mainImg">
-        <b><h1 class="text-center width-[100%] text-[1em] flex gap-[0.7em] justify-left items-center"><span id="name"></span><i class="bi bi-pencil-fill text-[#8540f5] text-[0.8em]"></i></h1></b>
-        <b><h1 class="text-center width-[100%] text-[1em]">Password</h1></b>
-        <input type="text" id="oldPass" class="input" placeholder="Old Pasword">
-        <input type="text" id="newPass" class="input" placeholder="New Password">
-        <input type="text" id="repPass" class="input" placeholder="Repeat Password">
-        <button class="button upd">Update Password</button>
+    <a class="purple text-[2em] text-left text-[#8540f5]">&lt; Back to all blogs</a>
+    <h2 class="heading">All From <span id="User"></span></h2>
+    
+    <div class="flex justify-between items-start gap-[1em] p-[2em] w-[100%]">
+        <div></div>
+        <div class="flex flex-col justify-right items-end gap-[0.3em]">
+            <p id="mail"></p>
+            <p id="pname" class="text-[#8540f5] text-[2em]"></p>
+            <img src="https://avatars.githubusercontent.com/u/120649081?v=4" class="w-[12em] h-[12em]" style="border-radius: 20px!important;">
+        </div>
     </div>
-
 
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
@@ -65,7 +61,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <!-- javascript -->
-    <script src="./profile.js"></script>
+    <script src="./user.js"></script>
 </body>
 
 </html>

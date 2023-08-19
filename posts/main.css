@@ -223,7 +223,7 @@ textarea::-webkit-scrollbar-thumb {
     width: 100%;
     height: fit-content;
     border-radius: 0!important;
-
+    padding: 0em!important;
 }
 
 .drop-down {
@@ -454,7 +454,7 @@ ul {
 
 .renderPost{
     border: 1px solid #ccc;
-    padding: 1.5em!important;
+    padding: 1em 2em!important;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -516,4 +516,44 @@ ul {
     font-size: 1.5em;
     width: 100%;
     text-align: center;
+}
+
+.mainImg{
+    width: 10em;
+    height: 10em;
+    border-radius: 10px;
+}
+
+.upd{
+    width: 10em !important;
+}
+
+.input {
+    width: 100%;
+    height: auto;
+    color: #212121;
+    background-color: #fff!important;
+    border: 1px solid #ccc!important;
+    /* border-radius: 5px; */
+    padding: 0.5em!important;
+}
+
+.input:focus{
+    border: 1px solid #8540f5!important;
+}
+
+.anchor{
+    padding: 0!important;
+    width: 100%!important;
+    text-align: left!important;
+    color: #8540f5!important;
+    text-decoration: none!important;
+    margin: 0!important;
+}
+
+.purple{
+    color: #8540f5!important;
+    text-align: left!important;
+    width: 100%!important;
+    padding-left: 1em;
 }
