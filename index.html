@@ -23,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- css -->
     <link rel="stylesheet" href="./posts/main.css">
+    <link rel="stylesheet" href="./nav.css">
     <!-- tailwind css -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- bootstrap -->
@@ -37,6 +38,16 @@
         <div class="flex justify-center items-center width-[fit-content] gap-[1em]">
             <p id="headerName" onclick="window.location.href = './profile.html'"></p>
             <a onclick="logOut()">Logout</a>
+            <div class="dropdown">
+                <button class="drop-down" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <p class="bi bi-three-dots-vertical dots"></p>
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="list"><a href="./all.html" class="drop-down-options" type="button">All Blogs</a></li>
+                    <li class="list"><a href="./index.html" class="drop-down-options" type="button">Dashboard</a></li>
+                    <li class="list"><a href="./profile.html" class="drop-down-options" type="button">Profile</a></li>
+                </ul>
+            </div>
         </div>
     </header>
 
