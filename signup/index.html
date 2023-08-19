@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <!-- icons cdn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"></link>
+    <!-- font cdn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="./main.css"></link>
+</head>
+
+<body>
+
+    <header>
+        <h3>Personal Blogging App</h3>
+        <a href="../login/index.html">Login</a>
+    </header>
+
+    <h2 class="heading">Signup</h2>
+
+    <form class="c jcc ais login-signup" onsubmit="signup(event)">
+        <h2 class="center">SignUp</h2>
+        <input required id="first-name" type="text" class="input" placeholder="First Name" minlength="3" maxlength="20">
+        <input required id="last-name" type="text" class="input" placeholder="Last Name" minlength="1" maxlength="20">
+        <input required id="email-signup" type="email" class="input" placeholder="E-mail">
+        <div class="r jcsb aic">
+            <input required id="password-signup" type="password" class="input" placeholder="Password" minlength="8">
+            <i class="eye bi bi-eye-slash" onclick="showPassword(event)"></i>
+        </div>
+        <div class="r jcsb aic">
+            <input required id="password-signup-repeat" type="password" class="input" placeholder="Repeat Password" minlength="8" maxlength="10">
+            <i class="eye bi bi-eye-slash" onclick="showPassword(event)"></i>
+        </div>
+        <p class="validationMessage"></p>
+        <button type="submit" class="button">Signup</button>
+        <p class="center">Don't have an account ?</p>
+        <a href="javascript:void(0)" onclick="window.location.href ='../login/index.html' " class="center">Login</a>
+    </form>
+
+     <!-- firebase -->
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- javascript -->
+    <script src="./main.js"></script>
+</body>
+
+</html>

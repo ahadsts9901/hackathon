@@ -1,0 +1,17 @@
+* {
+    outline: none;
+    box-sizing: border-box;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    background-color: #fff;
+    color: #15182b;
+    padding: 0.5em;
+    border: none;
+    margin-left: auto;
+}
