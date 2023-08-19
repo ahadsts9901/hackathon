@@ -85,20 +85,22 @@ function signup(event) {
     // firebase
 
     firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            window.location.href = "../index.html";
-        })
-        .catch((error) => {
-            console.log(error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Username Already Taken',
-                confirmButtonColor: "#252525"
-            })
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        // After successful registration, set the photoURL
+        const user = userCredential.user;
+        user.updateProfile({
+            photoURL: user.photoURL,
+        }).then(() => {
+            // Now the photoURL is set for the user
+        }).catch((error) => {
+            console.log("Error setting profile picture:", error);
         });
+    })
+    .catch((error) => {
+        console.log("Error creating user:", error);
+    });
+
     
     // Reset the input fields after successful signup
     document.getElementById("first-name").value = "";

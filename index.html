@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="./posts/main.css">
     <!-- tailwind css -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 
 <body
@@ -33,27 +35,33 @@
     <header>
         <h3>Personal Blogging App</h3>
         <div class="flex justify-center items-center width-[fit-content] gap-[1em]">
-            <p id="headerName">kahhshdhssd</p>
+            <p id="headerName"></p>
             <a onclick="logOut()">Logout</a>
         </div>
     </header>
 
     <h2 class="heading">Dashboard</h2>
-
+    
     <form class="form" onsubmit="createPost(event)">
-        <input required type="text" class="input" placeholder="Title...">
+        <input required id="title" type="text" class="input" placeholder="Title...">
         <textarea required id="post" class="input post" required placeholder="Text..." oninput="textAreaSize()"></textarea>
         <button type="submit" class="button">Publish blog</button>
     </form>
+    
+    <p class="myBlogs">My Blogs</p>
+    <div class="resultDash"></div>
 
-    <div class="result"></div>
-
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <!-- firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js "></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js "></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <!-- javascript -->
     <script src="./posts/main.js"></script>
 </body>
